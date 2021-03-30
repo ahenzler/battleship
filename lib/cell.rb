@@ -1,10 +1,12 @@
 class Cell
   attr_reader :coordinate,
-              :ship
+              :ship,
+              :fire
 
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
+    @fire = false
   end
 
   def empty?
@@ -19,29 +21,23 @@ class Cell
     @ship = cruiser
   end
 
+  def fire_upon
+    @fire = true
+  end
+
   def fired_upon?
-    if @ship.health < @ship.length
+    if @fire == true
       true
     else
       false
     end
   end
 
-  def fire_upon
-    if empty? == false
-      @ship.hit
+  def render
+    if empty? == true && fired_upon? == true
+      "M"
+    elsif empty? == true
+      "."
     end
   end
- #meeting at 12:25 mst
-  # def render
-  #   if empty? == true
-  #     "."
-  #   elsif fired_upon? == true && empty? == true
-  #     "M"
-  #   elsif fired_upon? == true && empty? == false
-  #     "H"
-  #   elsif empty? == false
-  #     "S"
-  #   end
-  # end
 end
