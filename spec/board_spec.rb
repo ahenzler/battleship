@@ -2,33 +2,36 @@ require './lib/board'
 require './lib/cell'
 require './lib/ship'
 
-Rspec describe Board do
+RSpec.describe Board do
   it 'has a board' do
     board = Board.new
 
     expect(board).to be_instance_of(Board)
   end
 
-  # xit 'has cells' do
-  #   board = Board.new
-  #
-  #   expect(board.cells).to eq{"A1" => cell_1,
-  #                             "A2" => cell_2,
-  #                             "A3" => cell_3,
-  #                             "A4" => cell_4,
-  #                             "B1" => cell_5,
-  #                             "B2" => cell_6,
-  #                             "B3" => cell_7,
-  #                             "B4" => cell_8,
-  #                             "C1" => cell_9,
-  #                             "C2" => cell_10,
-  #                             "C3" => cell_11,
-  #                             "C4" => cell_12,
-  #                             "D1" => cell_13,
-  #                             "D2" => cell_14,
-  #                             "D3" => cell_15,
-  #                             "D4" => cell_16}
-  # end
+  xit 'has cells' do
+    board = Board.new
+
+    expect(board.cells.keys.count).to eq(16)
+    expect(board.cells.values.count).to eq(16)
+  end
+                            # eq{"A1" => cell_1,
+                            #   "A2" => cell_2,
+                            #   "A3" => cell_3,
+                            #   "A4" => cell_4,
+                            #   "B1" => cell_5,
+                            #   "B2" => cell_6,
+                            #   "B3" => cell_7,
+                            #   "B4" => cell_8,
+                            #   "C1" => cell_9,
+                            #   "C2" => cell_10,
+                            #   "C3" => cell_11,
+                            #   "C4" => cell_12,
+                            #   "D1" => cell_13,
+                            #   "D2" => cell_14,
+                            #   "D3" => cell_15,
+                            #   "D4" => cell_16}
+
 
   xit 'can validate coordinates' do
     board = Board.new
@@ -44,7 +47,8 @@ Rspec describe Board do
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
-    #coordintates should be same length a sship
+
+    #coordintates should be same length a ship
     expect(board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
     expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
     #coordinates should be consecutive
@@ -56,8 +60,8 @@ Rspec describe Board do
     expect(board.valid_placement?(cruiser, ["A1", "B2", "B3"])).to eq(false)
     expect(board.valid_placement?(submarine, ["C2", "D3"])).to eq(false)
     #coordinates should be GOOD!!
-    expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(false)
-    expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(false)
+    expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
+    expect(board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
   end
 
   xit 'can place ships' do
