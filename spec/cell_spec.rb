@@ -71,6 +71,16 @@ RSpec.describe Cell do
 
     expect(cell_1.render).to eq("M")
     expect(cell_2.render).to eq(".")
-  end
 
+    cell_2.fire_upon
+
+    expect(cell_2.render).to eq("H")
+    expect(cruiser.sunk?).to eq(false)
+
+    cruiser.hit
+    cruiser.hit
+
+    expect(cruiser.sunk?).to eq(true)
+    expect(cell_2.render).to eq("X")
+  end
 end
