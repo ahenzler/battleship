@@ -10,7 +10,8 @@ class Board
     ["A", "B", "C", "D"].each do |letter|
       ["1", "2", "3", "4"].each do |number|
         name = letter + number
-        @cells[name] = name
+        cell = Cell.new("name")
+        @cells[name] = cell
       end
     end
   end

@@ -12,22 +12,22 @@ RSpec.describe Board do
   it 'has cells' do
     board = Board.new
 
-  # expected = {"A1" => cell_1,
-  #             "A2" => cell_2,
-  #             "A3" => cell_3,
-  #             "A4" => cell_4,
-  #             "B1" => cell_5,
-  #             "B2" => cell_6,
-  #             "B3" => cell_7,
-  #             "B4" => cell_8,
-  #             "C1" => cell_9,
-  #             "C2" => cell_10,
-  #             "C3" => cell_11,
-  #             "C4" => cell_12,
-  #             "D1" => cell_13,
-  #             "D2" => cell_14,
-  #             "D3" => cell_15,
-  #             "D4" => cell_16}
+  # expected = {"A1" => "A1",
+  #             "A2" => "A2",
+  #             "A3" => "A3",
+  #             "A4" => "A4",
+  #             "B1" => "B1",
+  #             "B2" => "B2",
+  #             "B3" => "B3",
+  #             "B4" => "B4",
+  #             "C1" => "C1",
+  #             "C2" => "C2",
+  #             "C3" => "C3",
+  #             "C4" => "C4",
+  #             "D1" => "D1",
+  #             "D2" => "D2",
+  #             "D3" => "D3",
+  #             "D4" => "D4"}
   #   expect(board.cells).to eq(expected)
     expect(board.cells.keys.count).to eq(16)
     expect(board.cells.values.count).to eq(16)
