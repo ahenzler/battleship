@@ -3,8 +3,8 @@ class Board
 
   def initialize
     @cells = {}
-    @collumns_range = ("1..4")
-    @rows_range = ("A..D")
+    @rows_only = []
+    @colls_only = []
     add_cells
   end
 
@@ -25,23 +25,18 @@ class Board
     end
   end
 
-  # def valid_coordinates?(coordinates)
-    # if @rows_range.include?(coordinates[0]) && @collumns_range.include?(coordinates[1])
-    #         true
-    #   else
-    #     false
-    #   end
-  # end
-
-  #dont nest conditionals - predicate methods
-  # helper methods
-  # every branch - method has to be tested
-  # make sure you test every case
-  #make rows and colloms
-
 
   def valid_placement?(ship, coordinates)
-    if length_valid?(ship, coordinates)
+    if length_valid?(ship, coordinates) && @cells[coordinates].nil?
+      create_rows_colls(coordinates)
+      if rows_consecutive? && colls_consecutive?
+        true
+        !diagonal?
+      else
+        false
+      end
+    else
+      false
     end
   end
 
@@ -49,31 +44,27 @@ class Board
     ship.length == coordinates.length
   end
 
-  def consecutive?(coordinates)
-    #colls are numbers
-    #rows are letters
-    colls = []
-    rows = []
-    coordinates.each_char do |char|
-      rows << char[0].ord
-      colls << char[1].to_i
+  def create_rows_colls(coordinates)
+    @rows_only = coordinates.map do |coord|
+      coord.chars.first.ord
     end
-    rows.each_cons(2).all? do |a,b|
-      a - b == -1
-    end
-    colls.each_cons(2).all? do |a,b|
-      a - b == -1
-    end
-      #you can use include? on each consecutive
-      #at the end see if all the index's of the result are the same
-      #we need it to return a true or false
+    @colls_only = coordinates.map do |coord|
+      coord.chars.last.to_i
     end
   end
 
-  # diagonal?(ship, coordinates)
-  # end
+  def rows_consecutive?
+    @rows_only.each_cons(2).all? {|a,b| a - b == -1} || @rows_only.each_cons(2).all? {|a,b| a == b}
+  end
 
+  def colls_consecutive?
+     @colls_only.each_cons(2).all? {|a,b| a - b == -1} || @colls_only.each_cons(2).all? {|a,b| a == b}
+  end
 
+  def diagonal?
+    @rows_only.each_cons(2).all? {|a,b| a - b == -1} && @colls_only.each_cons(2).all? {|a,b| a - b == -1}
+  end
 
-
+  def place_ships
+  end
 end
