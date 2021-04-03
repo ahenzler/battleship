@@ -3,6 +3,8 @@ class Board
 
   def initialize
     @cells = {}
+    @rows_only = []
+    @colls_only = []
     add_cells
   end
 
@@ -10,8 +12,7 @@ class Board
     ["A", "B", "C", "D"].each do |letter|
       ["1", "2", "3", "4"].each do |number|
         name = letter + number
-        cell = Cell.new("name")
-        @cells[name] = cell
+        @cells[name] = Cell.new(name)
       end
     end
   end
@@ -24,25 +25,51 @@ class Board
     end
   end
 
+
   def valid_placement?(ship, coordinates)
-    if ship.length == coordinates.length
-      true
+    if length_valid?(ship, coordinates) && @cells[coordinates].nil?
+      create_rows_colls(coordinates)
+      if rows_consecutive? && colls_consecutive?
+        true
+        !diagonal?
+      else
+        false
+      end
     else
       false
     end
   end
 
-  # def length_valid?(ship, coordinates)
-  #   if ship.length == coordinates.length
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
+  def length_valid?(ship, coordinates)
+    ship.length == coordinates.length
+  end
 
-  # def consecutive?(ship, coordinates)
-  # end
+  def create_rows_colls(coordinates)
+    @rows_only = coordinates.map do |coord|
+      coord.chars.first.ord
+    end
+    @colls_only = coordinates.map do |coord|
+      coord.chars.last.to_i
+    end
+  end
 
-  # def no_diagonal?(ship, coordinates)
-  # end
+  def rows_consecutive?
+    @rows_only.each_cons(2).all? {|a,b| a - b == -1} || @rows_only.each_cons(2).all? {|a,b| a == b}
+  end
+
+  def colls_consecutive?
+     @colls_only.each_cons(2).all? {|a,b| a - b == -1} || @colls_only.each_cons(2).all? {|a,b| a == b}
+  end
+
+  def diagonal?
+    @rows_only.each_cons(2).all? {|a,b| a - b == -1} && @colls_only.each_cons(2).all? {|a,b| a - b == -1}
+  end
+
+
+  def place(ship, coordinates)
+    coordinates.map do |coordinate|
+      (@cells[coordinate]).place_ship(ship)
+    end
+  end
+
 end
