@@ -65,6 +65,11 @@ class Board
     @rows_only.each_cons(2).all? {|a,b| a - b == -1} && @colls_only.each_cons(2).all? {|a,b| a - b == -1}
   end
 
-  def place_ships
+
+  def place(ship, coordinates)
+    coordinates.map do |coordinate|
+      (@cells[coordinate]).place_ship(ship)
+    end
   end
+
 end
