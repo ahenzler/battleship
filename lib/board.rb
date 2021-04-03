@@ -27,7 +27,7 @@ class Board
 
 
   def valid_placement?(ship, coordinates)
-    if length_valid?(ship, coordinates) && @cells[coordinates].nil?
+    if length_valid?(ship, coordinates) && overlap?(coordinates)
       create_rows_colls(coordinates)
       if rows_consecutive? && colls_consecutive?
         true
@@ -39,6 +39,13 @@ class Board
       false
     end
   end
+
+  def overlap?(coordinates)
+    coordinates.each do |coordinate|
+      @cells[coordinate].empty?
+    end
+  end
+
 
   def length_valid?(ship, coordinates)
     ship.length == coordinates.length
