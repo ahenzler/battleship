@@ -87,6 +87,7 @@ class Board
     grid.insert(-16, "\nC ")
     grid.insert(-8, "\nD ")
     grid.insert(-1, " \n")
+    require "pry"; binding.pry
     return grid
   end
 end
