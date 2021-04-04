@@ -45,10 +45,10 @@ class Cell
       "X"
     elsif empty? == false && fired_upon? == true
       "H"
-    elsif ship == true && fired_upon? == false
-      "S"
     elsif fired_upon? == false
       "."
+    elsif ship == true && fired_upon? == false
+      "S"
     end
   end
 end

@@ -46,7 +46,6 @@ class Board
     end
   end
 
-
   def length_valid?(ship, coordinates)
     ship.length == coordinates.length
   end
