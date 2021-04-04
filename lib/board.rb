@@ -41,7 +41,7 @@ class Board
   end
 
   def overlap?(coordinates)
-    coordinates.each do |coordinate|
+    coordinates.all? do |coordinate|
       @cells[coordinate].empty?
     end
   end
@@ -77,7 +77,7 @@ class Board
     end
   end
 
-  def render(reveal = nil)
+  def render(reveal = false)
     grid = ''
     @cells.keys.each do |key|
       grid += " " + @cells[key].render(reveal)
@@ -86,6 +86,7 @@ class Board
     grid.insert(-24, "\nB ")
     grid.insert(-16, "\nC ")
     grid.insert(-8, "\nD ")
+    grid.insert(-1, " \n")
     return grid
   end
 end

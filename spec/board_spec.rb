@@ -102,7 +102,7 @@ RSpec.describe Board do
       cell_2 = board.cells["A2"]
       cell_3 = board.cells["A3"]
 
-      expect(board.valid_placement?(submarine, ["A1", "B1"])).to eq(true)
+      expect(board.valid_placement?(submarine, ["A1", "B1"])).to eq(false)
     end
 
     it 'does not have overlapping ships' do
@@ -120,11 +120,11 @@ RSpec.describe Board do
 
     it 'can render board' do
       board.place(cruiser, ["A1", "A2", "A3"])
-      expected = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . ."
+      expected = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
       expect(board.render).to eq(expected)
 
-      # expected = "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
-      # expect(board.render(true)).to eq(expected)
+      expected = "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
+      expect(board.render(true)).to eq(expected)
     end
   end
 end
