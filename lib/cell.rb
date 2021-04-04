@@ -38,17 +38,17 @@ class Cell
     end
   end
 
-  def render(ship = nil)
+  def render(ship = false)
     if empty? == true && fired_upon? == true
       "M"
     elsif fired_upon? == true && @ship.sunk? == true
       "X"
     elsif empty? == false && fired_upon? == true
       "H"
+    elsif empty? == true || fired_upon? == false && ship == false
+      "."
     elsif ship == true && fired_upon? == false
       "S"
-    elsif fired_upon? == false
-      "."
     end
   end
 end

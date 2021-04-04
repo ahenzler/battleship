@@ -41,11 +41,10 @@ class Board
   end
 
   def overlap?(coordinates)
-    coordinates.each do |coordinate|
+    coordinates.all? do |coordinate|
       @cells[coordinate].empty?
     end
   end
-
 
   def length_valid?(ship, coordinates)
     ship.length == coordinates.length
@@ -72,11 +71,22 @@ class Board
     @rows_only.each_cons(2).all? {|a,b| a - b == -1} && @colls_only.each_cons(2).all? {|a,b| a - b == -1}
   end
 
-
   def place(ship, coordinates)
-    coordinates.map do |coordinate|
+    coordinates.each do |coordinate|
       (@cells[coordinate]).place_ship(ship)
     end
   end
 
+  def render(reveal = false)
+    grid = ''
+    @cells.keys.each do |key|
+      grid += " " + @cells[key].render(reveal)
+    end
+    grid.insert(0,"  1 2 3 4 \nA")
+    grid.insert(-24, "\nB ")
+    grid.insert(-16, "\nC ")
+    grid.insert(-8, "\nD ")
+    grid.insert(-1, " \n")
+    return grid
+  end
 end
