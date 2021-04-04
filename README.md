@@ -2,7 +2,7 @@
 
 Project: Battleship
 
-Group Member Names: Alica & Jermaine
+Group Member Names: Alicia & Jermaine
 
 Schedule: Meet before class when possible for two hours.
 	Monday: Project Work Time
