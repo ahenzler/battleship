@@ -4,10 +4,17 @@ class GameFlow
   end
 
   def game_flow
+    print "\nWelcome to BATTLESHIP\nEnter p to play. Enter q to quit.\n"
+    if get_input == "p"
+      # setup
+      # turn
+      # end_game
+    elsif get_input == "q"
+      exit
+    else
+      puts "Invald Respone"
+    end
     # main_menu
-    # setup
-    # turn
-    # end_game
   end
 
   def get_input
@@ -34,6 +41,19 @@ class GameFlow
     # - player
     #have user place ships and make sure they are valid and displayed x2
     #invlid responces
+  end
+
+  def computer_setup
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+    # board.place(ship, coordinates)
+  end
+
+  def instructions
+  end
+
+  def player_setup
   end
 
   def turn
