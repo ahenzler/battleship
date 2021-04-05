@@ -14,22 +14,10 @@ class GameFlow
     else
       puts "Invald Respone"
     end
-    # main_menu
   end
 
   def get_input
     gets.chomp.downcase.strip
-  end
-
-  def main_menu
-    print "\nWelcome to BATTLESHIP\nEnter p to play. Enter q to quit.\n"
-    if get_input == "p"
-      #method to do somehting
-    elsif get_input == "q"
-      exit
-    else
-      puts "Invald Respone"
-    end
   end
 
   def setup
