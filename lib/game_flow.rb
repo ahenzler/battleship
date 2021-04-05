@@ -1,28 +1,66 @@
-# Functionality Checklist
-# This checklist summarizes all of the functionality you are expected to build. This will be used to assess the completion of your project:
-#
-# Main Menu:
-#
-# User is shown the main menu where they can play or quit
-# Setup:
-#
-# Computer can place ships randomly in valid locations
-# User can enter valid sequences to place both ships
-# Entering invalid ship placements prompts user to enter valid placements
-# Turn:
-#
-# User board is displayed showing hits, misses, sunken ships, and ships
-# Computer board is displayed showing hits, misses, and sunken ships
-# Computer chooses a random shot
-# Computer does not fire on the same spot twice
-# User can choose a valid coordinate to fire on
-# Entering invalid coordinate prompts user to enter valid coordinate
-# Both computer and player shots are reported as a hit, sink, or miss
-# User is informed when they have already fired on a coordinate
-# Board is updated after a turn
-# End Game:
-#
-# Game ends when all the user’s ships are sunk
-# Game ends when all the computer’s ships are sunk
-# Game reports who won
-# Game returns user back to the Main Menu
+class GameFlow
+  attr_reader
+  def initialize
+  end
+
+  def game_flow
+    # main_menu
+    # setup
+    # turn
+    # end_game
+  end
+
+  def get_input
+    gets.chomp.downcase.strip
+  end
+
+  def main_menu
+    print "\nWelcome to BATTLESHIP\nEnter p to play. Enter q to quit.\n"
+    if get_input == "p"
+      #method to do somehting
+    elsif get_input == "q"
+      exit
+    else
+      puts "Invald Respone"
+    end
+  end
+
+  def setup
+    #HELPER METHODS
+    # - computer
+    #generate a computer board with ships - using valid placement
+    # - instructions
+    #display instructions/sample
+    # - player
+    #have user place ships and make sure they are valid and displayed x2
+    #invlid responces
+  end
+
+  def turn
+    #HELPER METHODS
+    # - display boards
+    #displays both boards at start of each turn - player can see thier ships but not computers
+    #- player
+    #player takes a shot - get input - valid coordinate? - edge case: coordinate has already been fired on - add shot to computer board
+    # - computer
+    #computer takes a shot - random- valid coordinate? - add shot to player board
+    # - shot report
+    # - helper helper to get cell that was shot on status
+    #result of player shot
+    #result of the computer shot
+  end
+
+  def turn_results #helper helper
+    #HELPER METHODS -
+    #shot miss - shot hit - shot sunk
+  end
+
+  def end_game
+    #HELPER METHODS
+    #  - determins if both of a player/computer ships have sunk
+    # if so
+    #print who wins
+    #return to main menu
+  end
+
+end

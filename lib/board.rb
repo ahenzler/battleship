@@ -27,7 +27,7 @@ class Board
 
 
   def valid_placement?(ship, coordinates)
-    if length_valid?(ship, coordinates) && overlap?(coordinates)
+    if length_valid?(ship, coordinates) && overlap?(coordinates) && !same?
       create_rows_colls(coordinates)
       if rows_consecutive? && colls_consecutive?
         true
@@ -69,6 +69,10 @@ class Board
 
   def diagonal?
     @rows_only.each_cons(2).all? {|a,b| a - b == -1} && @colls_only.each_cons(2).all? {|a,b| a - b == -1}
+  end
+
+  def same?
+    @rows_only.each_cons(2).all? {|a,b| a == b} && @colls_only.each_cons(2).all? {|a,b| a == b}
   end
 
   def place(ship, coordinates)
