@@ -7,15 +7,15 @@ class GameFlow
     puts "\nWelcome to BATTLESHIP you silly human!\n"
     puts "\nEnter p to play, if you dare challenge me.  If your not up to the challenge, enter q to quit.\n"
     get_input
-    # if get_input == "p"
-    #   # setup
-    #   # turn
-    #   # end_game
-    # elsif get_input == "q"
-    #   exit
-    # else
-    #   puts invalid_message
-    # end
+    if get_input == "p"
+      # setup
+      # turn
+      # end_game
+    elsif get_input == "q"
+      exit
+    else
+      puts invalid_message
+    end
   end
 
 
@@ -39,7 +39,7 @@ class GameFlow
     term_submarine = Ship.new("Submarine", 2)
 
     all_coordinates = term_board.cells.keys
-    all_coordinates.slice(0..4)
+
 
     #access the hash of cells just the keys - and - go through them
     #with board.cells.keys
@@ -54,18 +54,19 @@ class GameFlow
   end
 
   def instructions
+    "instructions"
   end
 
   def first_placement
     puts "\nHuman, I have strategically laid out my ships on the grid.\n"
     puts "\nYou now need to lay out your measley two ships.\nGood luck..."
     puts "\nThe Cruiser is three units long and the Submarine is two units long.\n"
-    puts "board.render"
+    # puts human_board.render
     puts "\nEnter the squares for the Cruiser (3 spaces):\n"
   end
 
   def second_placement
-    puts "board.render"
+    # puts human_board.render
     puts "\nEnter the squares for the Submarine (2 spaces):\n"
   end
 

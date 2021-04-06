@@ -27,11 +27,11 @@ class Board
 
 
   def valid_placement?(ship, coordinates)
-    if length_valid?(ship, coordinates) && overlap?(coordinates) && !same?
+    if length_valid?(ship, coordinates) && overlap?(coordinates)
       create_rows_colls(coordinates)
       if rows_consecutive? && colls_consecutive?
         true
-        !diagonal?
+        !diagonal? && !same?
       else
         false
       end
