@@ -7,20 +7,24 @@ RSpec.describe GameFlow do
   context 'exists' do
     game = GameFlow.new
 
-    it 'is a game' do
+    xit 'is a game' do
       expect(game).to be_instance_of(GameFlow)
     end
 
-    it 'has a invald response' do
+    xit 'has a invald response' do
       expect(game.invalid_message).to eq("Human error.... Try again:")
     end
 
-    it 'has instructions' do
+    xit 'has instructions' do
       expect(game.instructions).to eq("")
     end
 
-    it 'has computer setup' do
+    xit 'has computer setup' do
     expect(game.computer_setup).to eq('')
+    end
+
+    it 'has rhing do' do
+    expect(game.computer_turn).to eq[]
     end
   end
 end

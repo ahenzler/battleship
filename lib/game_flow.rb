@@ -101,12 +101,13 @@ class GameFlow
   end
 
   def turn
-    #HELPER METHODS
-    # - display boards
-    #displays both boards at start of each turn - player can see thier ships but not computers
-    #- player
-    #player takes a - get input - valid coordinate? - edge case: coordinate has already been fired on - add shot to computer board
-    # - computer
+    puts computer_board
+    puts player_board
+
+    puts human_turn
+    computer_turn
+
+        # - computer
     #computer takes a shot - random- valid coordinate? - add shot to player board
     # - shot report
     # - to get cell that was shot on status
@@ -114,26 +115,61 @@ class GameFlow
     #result of the computer shot
   end
 
+  def human_turn
+    puts"\nEnter the coordinate for your shot:\n"
+    get_input
+    input = get_input.upcase
+    if input != @terminator_start.valid_coordinate?(input)
+      invalid_message
+    else
+      @terminator_start.cells[input].fire_upon
+      @terminator_result = @terminator_start.cells[input].render
+    end
+  end
+
+  def computer_turn
+    not_fired_on = []
+
+    @human_start.cells.each do |_,value|
+      if value.fired_upon? == false
+        not_fired_on << value
+      end
+    end
+    coord = not_fired_on.sample(1)
+    @human_start.cells[coord].fire_upon
+    @human_result = @human_start.cells[coord].render
+  end
+
   def computer_board
-    "\n=============TERMINATOR BOARD=============\n"
-    puts @terminator_start
+    "\n=============TERMINATOR BOARD=============\n#{@terminator_start.render(reveal = false)}"
   end
 
   def player_board
-    "\n=============HUMAN BOARD=============\nboard.render"
-    @human_start
+    "\n=============HUMAN BOARD=============\n#{@human_start.render(reveal = true)}"
   end
 
   def invalid_shot
     "Human error.... you already shot there, better luck next time!"
   end
 
-  def turn_results #helper helper
-    #shot miss - shot hit - shot sunk
-  end
+  def turn_results
+    result = ""
+    if @human_result = "M"
+      result = "Miss"
+    elsif @human_result = "H"
+      result = "Hit"
+    elsif @human_result = "X"
+      result = "Sunk"
+    end
+      "Your shot on #{coord} was a #{result}."
 
-  def result
-    "\nYour shot on (input) was a (result).\nMy shot on (input) was a (result).\n"
+    # retunr reult of human board
+    # print string result with interp
+
+
+    human
+    # input of user on computer board
+    #print string result with interp
   end
 
   def end_game
