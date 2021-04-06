@@ -18,5 +18,8 @@ RSpec.describe GameFlow do
     it 'has instructions' do
       expect(game.instructions).to eq("instructions")
     end
+
+    it 'has computer setup'
+    expect(game.computer_setup).to eq('')
   end
 end

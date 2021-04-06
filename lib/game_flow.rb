@@ -39,18 +39,16 @@ class GameFlow
     term_submarine = Ship.new("Submarine", 2)
 
     all_coordinates = term_board.cells.keys
-
-
-    #access the hash of cells just the keys - and - go through them
-    #with board.cells.keys
-    #- to get 3 valid and random coordinates
-    # - add to the cruiser coord
     crusiser_coord = []
-    #this need to have 3
-    submarine_cord = []
-    #this needs to have 2
-
-    # board.place(ship, coordinates)
+    until term_board.valid_placement?(term_cruiser, coords) == true
+      crusiser_coord = all_coordinates.sample(3)
+    end
+    submarine_coord = []
+    until term_board.valid_placement?(term_submarine, coords) == true
+      submarine_coord = all_coordinates.sample(2)
+    end
+    term_board.place(term_crusiser, crusiser_coord)
+    term_board.place(term_submarine, submarine_coord)
   end
 
   def instructions
@@ -110,6 +108,7 @@ class GameFlow
   end
 
   def end_game
+    # begin_game
     #HELPER METHODS
     #  - determins if both of a player/computer ships have sunk
     # if so
