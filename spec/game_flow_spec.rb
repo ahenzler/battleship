@@ -16,10 +16,11 @@ RSpec.describe GameFlow do
     end
 
     it 'has instructions' do
-      expect(game.instructions).to eq("instructions")
+      expect(game.instructions).to eq("")
     end
 
-    it 'has computer setup'
+    it 'has computer setup' do
     expect(game.computer_setup).to eq('')
+    end
   end
 end

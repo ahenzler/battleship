@@ -5,7 +5,5 @@ class computer
     @submarine =
     @cruiser =
     @board =
-    @computer_shot
+    @computer_shot =
   end
-
-  
