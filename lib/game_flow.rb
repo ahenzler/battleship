@@ -52,7 +52,12 @@ class GameFlow
   end
 
   def instructions
-    "instructions"
+    puts "\nPlace your ships on the grid, ships can only be placed horizontally and vertically and must be within the confines of the baord.\n"
+    puts "\nThe goal of the game is to guess where the opponent has placed its ships by firing upon the cell coordinates.\n"
+    puts "\nEach round both the opponent and player will get one guess to fire upon a cell.\n"
+    puts "\nAt the end of each round the results of the guess will return a Hit or Miss.\n"
+    puts "\nWhen all of a ships spaces are hit the ship will be sunk.\n"
+    puts "\nThe first player to sink all of the opponents ships wins!\n"
   end
 
   def first_placement
