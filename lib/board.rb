@@ -51,7 +51,8 @@ class Board
   end
 
   def create_rows_colls(coordinates)
-    a
+    @rows_only = coordinates.map do |coord|
+      coord.chars.first.ord
     end
     @colls_only = coordinates.map do |coord|
       coord.chars.last.to_i
