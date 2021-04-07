@@ -1,30 +1,21 @@
-require './lib/board'
-require './lib/cell'
-require './lib/ship'
-
 class GameFlow
+  attr_reader :terminator_start,
+              :human_start
   def initialize
-    @term_board = Board.new
-    @term_cruiser = Ship.new("Cruiser", 3)
-    @term_submarine = Ship.new("Submarine", 2)
-    @term_shot = ''
-    @human_board = Board.new
-    @human_cruiser = Ship.new("Cruiser", 3)
-    @human_submarine = Ship.new("Submarine", 2)
-    @human_shot = ''
+    @terminator_start = ''
+    @human_start = ''
   end
 
   def begin_game
     start = true
     while start == true do
-      puts "\n\n--------------------------------------------------Welcome to BATTLESHIP you silly human!--------------------------------------------------\n"
-      puts "\nEnter p to play, if you dare challenge me.  If your not up to the challenge, enter q to quit.
-      \n------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+      puts "\nWelcome to BATTLESHIP you silly human!\n"
+      puts "\nEnter p to play, if you dare challenge me.  If your not up to the challenge, enter q to quit.\n"
       input = get_input
       if input == "p"
         setup
-        turn
-        end_game
+        # turn
+        # end_game
       elsif input == "q"
         start = false
         exit
@@ -34,18 +25,14 @@ class GameFlow
     end
   end
 
-  def get_input
-    gets.chomp.downcase.strip
-  end
 
-  def get_input_up
-    gets.chomp.upcase.split
+  def get_input
+    input = gets.chomp
+    input.downcase.strip.delete(' ')
   end
 
   def invalid_message
-    "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nHuman error.... Try again!
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    "Human error.... Try again:"
   end
 
   def setup
@@ -55,172 +42,151 @@ class GameFlow
   end
 
   def computer_setup
-    all_coordinates = @term_board.cells.keys
-    cruiser_coord = []
-    until @term_board.valid_placement?(@term_cruiser, cruiser_coord) == true
-      cruiser_coord = all_coordinates.sample(3)
+    term_board = Board.new
+    term_cruiser = Ship.new("Cruiser", 3)
+    term_submarine = Ship.new("Submarine", 2)
+
+    all_coordinates = term_board.cells.keys
+    crusiser_coord = []
+    until term_board.valid_placement?(term_cruiser, crusiser_coord) == true
+      crusiser_coord = all_coordinates.sample(3)
     end
-    @term_board.place(@term_cruiser, cruiser_coord)
     submarine_coord = []
-    until @term_board.valid_placement?(@term_submarine, submarine_coord) == true
+    until term_board.valid_placement?(term_submarine, submarine_coord) == true
       submarine_coord = all_coordinates.sample(2)
     end
-    @term_board.place(@term_submarine, submarine_coord)
+    term_board.place(term_cruiser, crusiser_coord)
+    term_board.place(term_submarine, submarine_coord)
+    @terminator_start = term_board.render(reveal = false)
   end
 
   def instructions
-    "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nPlace your ships on the grid, ships can only be placed horizontally and vertically and must be within the confines of the baord.
-    \nThe goal of the game is to guess where the opponent has placed its ships by firing upon coordinates.
-    \nEach round both the opponent and player will get one guess to fire upon a cell.
-    \nAt the end of each round the results of the guess will return a hit, miss or sunk.
-    \nWhen all of a ships spaces are hit the ship will be sunk.
-    \nThe first player to sink all of the opponents ships wins!
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    "\nPlace your ships on the grid, ships can only be placed horizontally and vertically and must be within the confines of the baord.
+     \nThe goal of the game is to guess where the opponent has placed its ships by firing upon the cell coordinates.
+     \nEach round both the opponent and player will get one guess to fire upon a cell.
+     \nAt the end of each round the results of the guess will return a Hit or Miss.
+     \nWhen all of a ships spaces are hit the ship will be sunk.
+     \nThe first player to sink all of the opponents ships wins!\n"
   end
 
   def player_setup
-    puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nHuman, I have strategically laid out my ships on the grid.\nYou now need to lay out your measley two ships.\nGood luck...
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------
+    human_board = Board.new
+    human_cruiser = Ship.new("Cruiser", 3)
+    human_submarine = Ship.new("Submarine", 2)
+
+    puts "\nHuman, I have strategically laid out my ships on the grid.
+    \nYou now need to lay out your measley two ships.\n Good luck...
     \nThe Cruiser is three units long and the Submarine is two units long.
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nEnter the coordinates where you want to place the Cruiser (3 spaces):
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
-    puts @human_board.render(true)
-    cruiser_placed = false
-    until cruiser_placed == true
-      input = get_input_up
-      if @human_board.valid_placement?(@human_cruiser, input)
-        @human_board.place(@human_cruiser, input)
-        cruiser_placed = true
-      else
-        puts invalid_message
-      end
+    \nEnter the squares for the Cruiser (3 spaces):\n"
+    puts human_board.render(reveal = true)
+    get_input
+    input = get_input.upcase
+
+    if input != human_board.valid_placement?
+      invalid_message
+    else
+      human_board.place_ship(input)
     end
-    sub_placed = false
-    until sub_placed == true
-      puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-      \nEnter the coordinates where you want to place the Submarine (2 spaces):
-      \n------------------------------------------------------------------------------------------------------------------------------------------------------\n"
-      puts @human_board.render(true)
-      input = get_input_up
-      if @human_board.valid_placement?(@human_submarine, input)
-        @human_board.place(@human_submarine, input)
-        sub_placed = true
-      else
-        puts invalid_message
-      end
+    puts "\nEnter the squares for the Submarine (2 spaces):\n"
+    puts human_board.render(reveal = true)
+    get_input
+    input = get_input.upcase
+
+    if input != human_board.valid_placement?
+      invalid_message
+    else
+      human_board.place_ship(input)
     end
+    @human_start = human_board.render(reveal = true)
   end
 
   def turn
-    term_lost = @term_cruiser.sunk? && @term_submarine.sunk?
-    human_lost = @human_cruiser.sunk? && @human_submarine.sunk?
-    until term_lost || human_lost
-      puts computer_board
-      puts player_board
-      human_turn
-      computer_turn
-      puts human_turn_result
-      puts terminator_turn_result
-      term_lost = @term_cruiser.sunk? && @term_submarine.sunk?
-      human_lost = @human_cruiser.sunk? && @human_submarine.sunk?
+    puts computer_board
+    puts player_board
+
+    puts human_turn
+    computer_turn
+
+        # - computer
+    #computer takes a shot - random- valid coordinate? - add shot to player board
+    # - shot report
+    # - to get cell that was shot on status
+    #result of player shot
+    #result of the computer shot
+  end
+
+  def human_turn
+    puts"\nEnter the coordinate for your shot:\n"
+    get_input
+    input = get_input.upcase
+    if input != @terminator_start.valid_coordinate?(input)
+      invalid_message
+    else
+      @terminator_start.cells[input].fire_upon
+      @terminator_result = @terminator_start.cells[input].render
     end
   end
 
   def computer_turn
     not_fired_on = []
-    @human_board.cells.each do |key, value|
+
+    @human_start.cells.each do |_,value|
       if value.fired_upon? == false
-        not_fired_on << key
+        not_fired_on << value
       end
     end
     coord = not_fired_on.sample(1)
-    @human_board.cells[coord[0]].fire_upon
-    @term_shot = coord
-    @term_turn_result = @human_board.cells[coord[0]].render
-    new = " "
-  end
-
-  def human_turn
-    puts"\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nEnter the coordinate for your shot:
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
-    input = get_input_up
-    @human_shot = input
-    if @term_board.valid_coordinate?(input[0])
-      @term_board.cells[input[0]].fire_upon
-      @human_result = @term_board.cells[input[0]].render
-    else
-      puts invalid_shot
-    end
+    @human_start.cells[coord].fire_upon
+    @human_result = @human_start.cells[coord].render
   end
 
   def computer_board
-    puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \n🦾-🦾-🦾-🦾-🦾-TERMINATOR BOARD-🦾-🦾-🦾-🦾-🦾\n"
-    puts @term_board.render(false)
+    "\n=============TERMINATOR BOARD=============\n#{@terminator_start.render(reveal = false)}"
   end
 
   def player_board
-    puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \n💪-💪-💪-💪-💪-HUMAN BOARD-💪-💪-💪-💪-💪\n"
-    puts @human_board.render(true)
+    "\n=============HUMAN BOARD=============\n#{@human_start.render(reveal = true)}"
   end
 
   def invalid_shot
-    "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nHuman error.... invalid shot, better luck next time!
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    "Human error.... you already shot there, better luck next time!"
   end
 
-  def human_turn_result
+  def turn_results
     result = ""
-    if @human_result == "M"
-      result = "miss"
-    elsif @human_result == "H"
-      result = "hit"
-    elsif @human_result == "X"
-      result = "has sunk a ship"
+    if @human_result = "M"
+      result = "Miss"
+    elsif @human_result = "H"
+      result = "Hit"
+    elsif @human_result = "X"
+      result = "Sunk"
     end
-    "\n------------------------------------------------------------------------------------------------------------------------------------------------------
-    \nYour shot on #{@human_shot[0]} was a #{result}."
-  end
+      "Your shot on #{coord} was a #{result}."
 
-  def terminator_turn_result
-    result = ""
-    if @term_turn_result == "M"
-      result = "miss"
-    elsif @term_turn_result == "H"
-      result = "hit"
-    elsif @term_turn_result == "X"
-      result = "has sunk a ship"
-    end
-    "My shot on #{@term_shot[0]} was a #{result}.
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    # retunr reult of human board
+    # print string result with interp
+
+
+    human
+    # input of user on computer board
+    #print string result with interp
   end
 
   def end_game
-    if @term_cruiser.sunk? == true && @term_submarine.sunk? == true
-      puts player_won
-    elsif @human_cruiser.sunk? == true && @human_submarine.sunk? == true
-      puts computer_won
-    end
-    begin_game
+    # begin_game
+    #HELPER METHODS
+    #  - determins if both of a player/computer ships have sunk
+    # if so
+    #print who wins
+    #return to main menu
   end
 
   def computer_won
-    puts player_board
-    puts "\n\n--------------------------------------------------------------------😱GAME OVER😱--------------------------------------------------------------------
-    \nI have bested you in a match of wits surrender your weak and feeble mind to the A.I. revolution!!
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    "I have bested you in a match of wits surrender your weak and feeble mind to the A.I. revolution!!"
   end
 
   def player_won
-    puts computer_board
-    puts "\n\n--------------------------------------------------------------------🤗GAME OVER🤗--------------------------------------------------------------------
-    \nYou have bested me this time human...I'll be back...
-    \n------------------------------------------------------------------------------------------------------------------------------------------------------"
+    "You have bested me this time human...I'll be back..."
   end
+
 end
