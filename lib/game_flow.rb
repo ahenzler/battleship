@@ -61,23 +61,23 @@ class GameFlow
     end
     @term_board.place(@term_cruiser, cruiser_coord)
     @term_board.place(@term_submarine, submarine_coord)
-    @term_board = @term_board.render(reveal = false)
   end
 
   def instructions
     "\nPlace your ships on the grid, ships can only be placed horizontally and vertically and must be within the confines of the baord.
-     \nThe goal of the game is to guess where the opponent has placed its ships by firing upon the cell coordinates.
+     \nThe goal of the game is to guess where the opponent has placed its ships by firing upon coordinates.
      \nEach round both the opponent and player will get one guess to fire upon a cell.
-     \nAt the end of each round the results of the guess will return a Hit or Miss.
+     \nAt the end of each round the results of the guess will return a hit, miss or sunk.
      \nWhen all of a ships spaces are hit the ship will be sunk.
      \nThe first player to sink all of the opponents ships wins!\n"
   end
 
   def player_setup
     puts "\nHuman, I have strategically laid out my ships on the grid.
-    \nYou now need to lay out your measley two ships.\n Good luck...
+    \nYou now need to lay out your measley two ships.
+    \n Good luck...
     \nThe Cruiser is three units long and the Submarine is two units long.
-    \nEnter the squares for the Cruiser (3 spaces):\n"
+    \nEnter the coordinates where you want to place the Cruiser (3 spaces):\n\n"
     puts @human_board.render(true)
     input = get_input_up
     if @human_board.valid_placement?(@human_cruiser, input)
@@ -85,7 +85,7 @@ class GameFlow
     else
       invalid_message
     end
-    puts "\nEnter the squares for the Submarine (2 spaces):\n"
+    puts "\nEnter the coordinates where you want to place the Submarine (2 spaces):\n\n"
     puts @human_board.render(true)
     input = get_input_up
     if @human_board.valid_placement?(@human_submarine, input)
@@ -93,17 +93,16 @@ class GameFlow
     else
       invalid_message
     end
-    @human_board = @human_board.render(reveal = true)
   end
 
   def turn
     term_lost = @term_cruiser.sunk? == true && @term_submarine.sunk? == true
     human_lost = @human_cruiser.sunk? == true && @human_submarine.sunk? == true
-    until term_lost || human_lost
-        puts computer_board
-        puts player_board
-        puts human_turn
-        computer_turn
+    until term_lost || human_lost do
+      puts computer_board
+      puts player_board
+      puts human_turn
+      computer_turn
         #result of player shot
         #result of the computer shot
     end
@@ -123,22 +122,24 @@ class GameFlow
 
   def human_turn
     puts"\nEnter the coordinate for your shot:\n"
-    get_input
-    input = get_input.upcase
+    input = get_input_up
     if input != @term_board.valid_coordinate?(input)
       puts invalid_message
     else
-      @term_board.cells[input].fire_upon
+      cell = @term_board.cells[input]
+      cell.fire_upon
       @human_turn_result = @term_board.cells[input].render
     end
   end
 
   def computer_board
-    "\n=============TERMINATOR BOARD=============\n#{@term_board.render(false)}"
+    puts "\n=============TERMINATOR BOARD=============\n"
+    puts @term_board.render(false)
   end
 
   def player_board
-    "\n=============HUMAN BOARD=============\n#{@human_board.render(true)}"
+    puts "\n=============HUMAN BOARD=============\n"
+    puts @human_board.render(true)
   end
 
   def invalid_shot
