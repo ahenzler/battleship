@@ -1,9 +1,13 @@
 class GameFlow
-  attr_reader :terminator_start,
-              :human_start
+  attr_reader :term_board,
+              :human_board
   def initialize
-    @terminator_start = ''
-    @human_start = ''
+    @term_board = Board.new
+    @term_cruiser = Ship.new("Cruiser", 3)
+    @term_submarine = Ship.new("Submarine", 2)
+    @human_board = Board.new
+    @human_cruiser = Ship.new("Cruiser", 3)
+    @human_submarine = Ship.new("Submarine", 2)
   end
 
   def begin_game
@@ -14,7 +18,7 @@ class GameFlow
       input = get_input
       if input == "p"
         setup
-        # turn
+        turn
         # end_game
       elsif input == "q"
         start = false
@@ -42,22 +46,18 @@ class GameFlow
   end
 
   def computer_setup
-    term_board = Board.new
-    term_cruiser = Ship.new("Cruiser", 3)
-    term_submarine = Ship.new("Submarine", 2)
-
-    all_coordinates = term_board.cells.keys
-    crusiser_coord = []
-    until term_board.valid_placement?(term_cruiser, crusiser_coord) == true
-      crusiser_coord = all_coordinates.sample(3)
+    all_coordinates = @term_board.cells.keys
+    cruiser_coord = []
+    until @term_board.valid_placement?(@term_cruiser, cruiser_coord) == true
+      cruiser_coord = all_coordinates.sample(3)
     end
     submarine_coord = []
-    until term_board.valid_placement?(term_submarine, submarine_coord) == true
+    until @term_board.valid_placement?(@term_submarine, submarine_coord) == true
       submarine_coord = all_coordinates.sample(2)
     end
-    term_board.place(term_cruiser, crusiser_coord)
-    term_board.place(term_submarine, submarine_coord)
-    @terminator_start = term_board.render(reveal = false)
+    @term_board.place(@term_cruiser, crusiser_coord)
+    @term_board.place(@term_submarine, submarine_coord)
+    @term_board = @term_board.render(reveal = false)
   end
 
   def instructions
@@ -70,40 +70,35 @@ class GameFlow
   end
 
   def player_setup
-    human_board = Board.new
-    human_cruiser = Ship.new("Cruiser", 3)
-    human_submarine = Ship.new("Submarine", 2)
-
     puts "\nHuman, I have strategically laid out my ships on the grid.
     \nYou now need to lay out your measley two ships.\n Good luck...
     \nThe Cruiser is three units long and the Submarine is two units long.
     \nEnter the squares for the Cruiser (3 spaces):\n"
-    puts human_board.render(reveal = true)
+    puts @human_board.render(reveal = true)
     get_input
     input = get_input.upcase
 
-    if input != human_board.valid_placement?
+    if input != @human_board.valid_placement?
       invalid_message
     else
-      human_board.place_ship(input)
+      @human_board.place_ship(input)
     end
     puts "\nEnter the squares for the Submarine (2 spaces):\n"
-    puts human_board.render(reveal = true)
+    puts @human_board.render(reveal = true)
     get_input
     input = get_input.upcase
 
-    if input != human_board.valid_placement?
+    if input != @human_board.valid_placement?
       invalid_message
     else
-      human_board.place_ship(input)
+      @human_board.place_ship(input)
     end
-    @human_start = human_board.render(reveal = true)
+    @human_board = @human_board.render(reveal = true)
   end
 
   def turn
     puts computer_board
     puts player_board
-
     puts human_turn
     computer_turn
 
@@ -119,33 +114,33 @@ class GameFlow
     puts"\nEnter the coordinate for your shot:\n"
     get_input
     input = get_input.upcase
-    if input != @terminator_start.valid_coordinate?(input)
+    if input != @term_board.valid_coordinate?(input)
       invalid_message
     else
-      @terminator_start.cells[input].fire_upon
-      @terminator_result = @terminator_start.cells[input].render
+      @term_board.cells[input].fire_upon
+      @terminator_result = @term_board.cells[input].render
     end
   end
 
   def computer_turn
     not_fired_on = []
 
-    @human_start.cells.each do |_,value|
+    @human_board.cells.each do |_,value|
       if value.fired_upon? == false
         not_fired_on << value
       end
     end
     coord = not_fired_on.sample(1)
-    @human_start.cells[coord].fire_upon
-    @human_result = @human_start.cells[coord].render
+    @human_board.cells[coord].fire_upon
+    @human_result = @human_board.cells[coord].render
   end
 
   def computer_board
-    "\n=============TERMINATOR BOARD=============\n#{@terminator_start.render(reveal = false)}"
+    "\n=============TERMINATOR BOARD=============\n#{@term_board.render(reveal = false)}"
   end
 
   def player_board
-    "\n=============HUMAN BOARD=============\n#{@human_start.render(reveal = true)}"
+    "\n=============HUMAN BOARD=============\n#{@human_board.render(reveal = true)}"
   end
 
   def invalid_shot
