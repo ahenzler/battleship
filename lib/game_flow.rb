@@ -48,6 +48,15 @@ class GameFlow
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
   end
 
+  def new_game
+    @term_board = Board.new
+    @term_cruiser = Ship.new("Cruiser", 3)
+    @term_submarine = Ship.new("Submarine", 2)
+    @human_board = Board.new
+    @human_cruiser = Ship.new("Cruiser", 3)
+    @human_submarine = Ship.new("Submarine", 2)
+  end
+
   def setup
     computer_setup
     puts instructions
@@ -211,12 +220,14 @@ class GameFlow
   end
 
   def computer_won
+    puts computer_board
     puts "\n\n--------------------------------------------------------------------😱GAME OVER😱--------------------------------------------------------------------
     \nI have bested you in a match of wits surrender your weak and feeble mind to the A.I. revolution!!
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
   end
 
   def player_won
+    puts human_board
     puts "\n\n--------------------------------------------------------------------🤗GAME OVER🤗--------------------------------------------------------------------
     \nYou have bested me this time human...I'll be back...
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
