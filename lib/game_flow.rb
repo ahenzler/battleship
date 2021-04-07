@@ -149,7 +149,7 @@ class GameFlow
   end
 
   def invalid_shot
-    "Human error.... you already shot there, better luck next time!"
+    "Human error....... you already shot there, better luck next time!"
   end
 
   def turn_results
