@@ -16,7 +16,7 @@ class GameFlow
 
   def begin_game
     start = true
-    while start == true do
+    while start == true
       puts "\n\n--------------------------------------------------Welcome to BATTLESHIP you silly human!--------------------------------------------------\n"
       puts "\nEnter p to play, if you dare challenge me.  If your not up to the challenge, enter q to quit.
       \n------------------------------------------------------------------------------------------------------------------------------------------------------\n"
@@ -25,6 +25,7 @@ class GameFlow
         setup
         turn
         end_game
+        new_game
       elsif input == "q"
         start = false
         exit
@@ -52,9 +53,12 @@ class GameFlow
     @term_board = Board.new
     @term_cruiser = Ship.new("Cruiser", 3)
     @term_submarine = Ship.new("Submarine", 2)
+    @term_shot = ''
     @human_board = Board.new
     @human_cruiser = Ship.new("Cruiser", 3)
     @human_submarine = Ship.new("Submarine", 2)
+    @human_shot = ''
+    begin_game
   end
 
   def setup
@@ -127,8 +131,8 @@ class GameFlow
     term_lost = @term_cruiser.sunk? && @term_submarine.sunk?
     human_lost = @human_cruiser.sunk? && @human_submarine.sunk?
     until term_lost || human_lost
-      puts computer_board
-      puts player_board
+      puts terminator_board
+      puts human_player_board
       human_turn
       computer_turn
       puts human_turn_result
@@ -156,23 +160,27 @@ class GameFlow
     puts"\n------------------------------------------------------------------------------------------------------------------------------------------------------
     \nEnter the coordinate for your shot:
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
-    input = get_input_up
-    @human_shot = input
-    if @term_board.valid_coordinate?(input[0])
-      @term_board.cells[input[0]].fire_upon
-      @human_result = @term_board.cells[input[0]].render
-    else
-      puts invalid_shot
+    shot_taken = false
+    until shot_taken == true
+      input = get_input_up
+      if @term_board.valid_coordinate?(input[0])
+        @term_board.cells[input[0]].fire_upon
+        @human_result = @term_board.cells[input[0]].render
+        @human_shot = input
+        shot_taken = true
+      else
+        puts invalid_shot
+      end
     end
   end
 
-  def computer_board
+  def terminator_board
     puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
     \n🦾-🦾-🦾-🦾-🦾-TERMINATOR BOARD-🦾-🦾-🦾-🦾-🦾\n"
-    puts @term_board.render(false)
+    puts @term_board.render(true)
   end
 
-  def player_board
+  def human_player_board
     puts "\n------------------------------------------------------------------------------------------------------------------------------------------------------
     \n💪-💪-💪-💪-💪-HUMAN BOARD-💪-💪-💪-💪-💪\n"
     puts @human_board.render(true)
@@ -216,18 +224,17 @@ class GameFlow
     elsif @human_cruiser.sunk? == true && @human_submarine.sunk? == true
       puts computer_won
     end
-    begin_game
   end
 
   def computer_won
-    puts computer_board
+    puts terminator_board
     puts "\n\n--------------------------------------------------------------------😱GAME OVER😱--------------------------------------------------------------------
     \nI have bested you in a match of wits surrender your weak and feeble mind to the A.I. revolution!!
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
   end
 
   def player_won
-    puts human_board
+    puts human_player_board
     puts "\n\n--------------------------------------------------------------------🤗GAME OVER🤗--------------------------------------------------------------------
     \nYou have bested me this time human...I'll be back...
     \n------------------------------------------------------------------------------------------------------------------------------------------------------"
